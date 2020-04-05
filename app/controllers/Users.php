@@ -14,7 +14,6 @@ class Users extends Controller
 
             // Sanitize POST data
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
             // Init Data
             $data = [
                 'name' => trim($_POST['name']),
@@ -61,7 +60,17 @@ class Users extends Controller
             // Make sure errors are empty 
             if (empty($data['email_error']) && empty($data['name_error']) && empty($data['password_error']) && empty($data['confirm_password_error'])) {
                 // Validated
-                die('SUCCESS');
+                
+                // Hash Password
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+                // Register User
+                if($this->userModel->register($data)) {
+                    redirect('/users/login');
+                } else {
+                    die('Something went wrong');
+                }
+
             } else {
                 // Load View with errors
                 $this->view('users/register', $data);
