@@ -8,13 +8,13 @@ class Pages extends Controller
 
     public function index()
     {
-        $data = ['title' => 'Share Posts'];
+        $data = ['title' => 'Share Posts', 'description' => 'Simple social network build on the SimosMVC PHP Framework'];
         $this->view('pages/index', $data);
     }
 
     public function about()
     {
-        $data = ['title' => 'About'];
+        $data = ['title' => 'About', 'description' => 'App to share posts with other users'];
         $this->view('pages/about', $data);
     }
 }
