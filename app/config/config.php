@@ -9,7 +9,7 @@
     // echo __FILE__;
     define('APPROOT', dirname(dirname(__FILE__)));
     // URL Root
-    define('URLROOT', 'http://localhost:8888/sharepost');
+    define('URLROOT', 'http://localhost:8888/sharepost/');
     // Site Name
     define('SITENAME', 'Share Posts');
     // App Version

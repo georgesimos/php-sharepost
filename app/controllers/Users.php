@@ -67,7 +67,7 @@ class Users extends Controller
                 // Register User
                 if ($this->userModel->register($data)) {
                     flash('register_success', 'You are registered and can log in');
-                    redirect('/users/login');
+                    redirect('users/login');
                 } else {
                     die('Something went wrong');
                 }
@@ -163,7 +163,7 @@ class Users extends Controller
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_email'] = $user->email;
         $_SESSION['user_name'] = $user->name;
-        redirect('/pages/index');
+        redirect('posts');
     }
 
     public function logout() {
@@ -171,15 +171,6 @@ class Users extends Controller
         unset($_SESSION['user_email']);
         unset($_SESSION['user_name']);
         session_destroy();
-        redirect('/users/login');
-    }
-
-    public function isLoggedIn()
-    {
-       if(isset($_SESSION['user_id'])) {
-           return true;
-       } else {
-           return false;
-       }
+        redirect('users/login');
     }
 }
