@@ -60,18 +60,17 @@ class Users extends Controller
             // Make sure errors are empty 
             if (empty($data['email_error']) && empty($data['name_error']) && empty($data['password_error']) && empty($data['confirm_password_error'])) {
                 // Validated
-                
+
                 // Hash Password
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
                 // Register User
-                if($this->userModel->register($data)) {
+                if ($this->userModel->register($data)) {
                     flash('register_success', 'You are registered and can log in');
                     redirect('/users/login');
                 } else {
                     die('Something went wrong');
                 }
-
             } else {
                 // Load View with errors
                 $this->view('users/register', $data);
@@ -121,10 +120,27 @@ class Users extends Controller
                 $data['password_error'] = 'Please enter password';
             }
 
+            // Check for user/email
+            if ($this->userModel->findUserByEmail($data['email'])) {
+                // found
+            } else {
+                $data['email_error'] = 'No user found';
+            }
+
             // Make sure errors are empty 
             if (empty($data['email_error'])  && empty($data['password_error'])) {
                 // Validated
-                die('SUCCESS');
+                // Check and set logged in user
+                $loggedInUser = $this->userModel->login($data['email'], $data['password']);
+
+                if ($loggedInUser) {
+                    // Create Session
+                    die('SUCCESS');
+                } else {
+                    $data['password_error'] = 'Password incorerect';
+
+                    $this->view('users/login', $data);
+                }
             } else {
                 // Load View with errors
                 $this->view('users/login', $data);
