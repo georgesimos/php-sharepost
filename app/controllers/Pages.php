@@ -8,6 +8,9 @@ class Pages extends Controller
 
     public function index()
     {
+        if(isLoggedIn()) {
+            redirect('posts');
+        }
         $data = ['title' => 'Share Posts', 'description' => 'Simple social network build on the SimosMVC PHP Framework'];
         $this->view('pages/index', $data);
     }
