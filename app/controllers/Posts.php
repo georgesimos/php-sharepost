@@ -47,7 +47,7 @@ class Posts extends Controller
             // Make sure no errors
             if (empty($data['title_error']) && empty($data['body_error'])) {
                 // Validated
-                if($this->postModel->addPost($data)) {
+                if ($this->postModel->addPost($data)) {
                     flash('post_message', 'Post Added');
                     redirect('posts');
                 } else {
@@ -66,7 +66,7 @@ class Posts extends Controller
         $this->view('posts/add', $data);
     }
 
-        public function edit($id)
+    public function edit($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize POST array
@@ -93,7 +93,7 @@ class Posts extends Controller
             // Make sure no errors
             if (empty($data['title_error']) && empty($data['body_error'])) {
                 // Validated
-                if($this->postModel->updatePost($data)) {
+                if ($this->postModel->updatePost($data)) {
                     flash('post_message', 'Post Updated');
                     redirect('posts');
                 } else {
@@ -107,7 +107,7 @@ class Posts extends Controller
             // Get existing post from model
             $post = $this->postModel->getPostById($id);
             // Check for owner
-            if($post->user_id != $_SESSION['user_id']) {
+            if ($post->user_id != $_SESSION['user_id']) {
                 redirect('posts');
             }
             $data = [
@@ -120,7 +120,8 @@ class Posts extends Controller
     }
 
 
-    public function show($id) {
+    public function show($id)
+    {
         $post = $this->postModel->getPostById($id);
         $user = $this->userModel->getUserById($post->user_id);
         $data = [
@@ -128,5 +129,27 @@ class Posts extends Controller
             'user' => $user
         ];
         $this->view('posts/show', $data);
+    }
+
+    public function delete($id)
+    {
+        // Get existing post from model
+        $post = $this->postModel->getPostById($id);
+
+        // Check for owner
+        if ($post->user_id != $_SESSION['user_id']) {
+            redirect('posts');
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($this->postModel->deletePost($id)) {
+                flash('post_message', 'Post Removed');
+                redirect('posts');
+            } else {
+                die('Something went wronf');
+            }
+        } else {
+            redirect('posts');
+        }
     }
 }
